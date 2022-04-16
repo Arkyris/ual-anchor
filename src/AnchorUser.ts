@@ -2,6 +2,7 @@ import { SignTransactionResponse, User, UALErrorType } from 'universal-authentic
 import { APIClient, PackedTransaction, SignedTransaction } from '@greymass/eosio'
 import { JsonRpc } from 'eosjs'
 import { UALAnchorError } from './UALAnchorError'
+import {notifyErrorAnchor, notifySuccess } from "../../../src/stores/notifications";
 
 export class AnchorUser extends User {
   public client: APIClient
@@ -58,6 +59,7 @@ export class AnchorUser extends User {
       }
       const wasBroadcast = (options.broadcast !== false)
       const serializedTransaction = PackedTransaction.fromSigned(SignedTransaction.from(completedTransaction.transaction))
+      notifySuccess(completedTransaction.payload.tx);
       return this.returnEosjsTransaction(wasBroadcast, {
         ...completedTransaction,
         transaction_id: completedTransaction.payload.tx,
@@ -68,6 +70,11 @@ export class AnchorUser extends User {
       const message = 'Unable to sign transaction'
       const type = UALErrorType.Signing
       const cause = e
+      if(e.details){
+        notifyErrorAnchor(e.details[0].message);
+    } else {
+        notifyErrorAnchor(type);
+    }
       throw new UALAnchorError(message, type, cause)
     }
   }
