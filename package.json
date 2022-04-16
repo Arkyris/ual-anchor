@@ -1,6 +1,6 @@
 {
   "name": "@arkyris/ual-anchor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "dist/index.js",
   "license": "MIT",
   "author": {
@@ -66,6 +66,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/greymass/ual-anchor"
+    "url": "https://github.com/arkyris/ual-anchor"
   }
 }

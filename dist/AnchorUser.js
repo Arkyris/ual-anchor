@@ -13,7 +13,7 @@ exports.AnchorUser = void 0;
 const universal_authenticator_library_1 = require("universal-authenticator-library");
 const eosio_1 = require("@greymass/eosio");
 const UALAnchorError_1 = require("./UALAnchorError");
-const { notifyErrorAnchor, notifySuccess } = require("../../../src/stores/notifications");
+const { notifyErrorAnchor, notifySuccess } = require("../../../../src/stores/notifications");
 class AnchorUser extends universal_authenticator_library_1.User {
     constructor(rpc, client, identity) {
         super();
