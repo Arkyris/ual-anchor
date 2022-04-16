@@ -13,7 +13,7 @@ exports.AnchorUser = void 0;
 const universal_authenticator_library_1 = require("universal-authenticator-library");
 const eosio_1 = require("@greymass/eosio");
 const UALAnchorError_1 = require("./UALAnchorError");
-const { notifyErrorAnchor, notifySuccess } = require("../../../../src/stores/notifications");
+const { notifyError, notifySuccess } = require("../../../../src/stores/notifications");
 class AnchorUser extends universal_authenticator_library_1.User {
     constructor(rpc, client, identity) {
         super();
@@ -55,7 +55,7 @@ class AnchorUser extends universal_authenticator_library_1.User {
                 }
                 const wasBroadcast = (options.broadcast !== false);
                 const serializedTransaction = eosio_1.PackedTransaction.fromSigned(eosio_1.SignedTransaction.from(completedTransaction.transaction));
-                notifySuccess(completedTransaction.payload.tx);
+                notifySuccess(completedTransaction.processed.id, completedTransaction.processed.receipt.status);
                 return this.returnEosjsTransaction(wasBroadcast, Object.assign(Object.assign({}, completedTransaction), { transaction_id: completedTransaction.payload.tx, serializedTransaction: serializedTransaction.packed_trx.array, signatures: this.objectify(completedTransaction.signatures) }));
             }
             catch (e) {
@@ -63,9 +63,9 @@ class AnchorUser extends universal_authenticator_library_1.User {
                 const type = universal_authenticator_library_1.UALErrorType.Signing;
                 const cause = e;
                 if(e.details){
-                    notifyErrorAnchor(e.details[0].message);
+                    notifyError(e.details[0].message);
                 } else {
-                    notifyErrorAnchor(type);
+                    notifyError(type);
                 }
                 throw new UALAnchorError_1.UALAnchorError(message, type, cause);
             }
